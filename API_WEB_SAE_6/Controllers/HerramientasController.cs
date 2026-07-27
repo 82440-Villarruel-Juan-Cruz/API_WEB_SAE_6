@@ -178,18 +178,13 @@ namespace API_WEB_SAE_6.Controllers
         {
             try
             {
-                if (TienePermiso(9))
-                {
-                    //Si es null es que ocurrio un conflicto en BD.
-                    List<Perfiles>? tiposDocumento = ToolsAdapter.ObtenerPerfiles();
+                //Si es null es que ocurrio un conflicto en BD.
+                List<Perfiles>? tiposDocumento = ToolsAdapter.ObtenerPerfiles();
 
-                    if (tiposDocumento == null) return Conflict();
-                    if (tiposDocumento.Count == 0) return NoContent();
+                if (tiposDocumento == null) return Conflict();
+                if (tiposDocumento.Count == 0) return NoContent();
 
-                    return Ok(tiposDocumento);
-                }
-                else return Forbid();
-
+                return Ok(tiposDocumento);
             }
             catch (Exception ex)
             {

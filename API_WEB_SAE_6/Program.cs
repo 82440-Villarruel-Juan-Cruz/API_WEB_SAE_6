@@ -12,12 +12,16 @@ var CorsRules = "CorsRules";
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: CorsRules,
-        builder =>
+        policy =>
         {
-            builder.WithOrigins("http://localhost:3000", "http://localhost:5173") // Ajusta al puerto de tu React
+            policy.WithOrigins("http://localhost:1986",
+                "http://localhost:5173",
+                "http://localhost:7221",
+                "http://tidsrv1.tid.frc.utn.edu.ar",
+                "https://tidsrv1.tid.frc.utn.edu.ar") // Tus puertos de React
                   .AllowAnyHeader()
                   .AllowAnyMethod()
-                  .AllowCredentials();
+                  .AllowCredentials(); // Si tu app usa cookies/sesiones
         });
 });
 
