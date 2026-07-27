@@ -14,11 +14,11 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: CorsRules,
         builder =>
         {
-            builder.AllowAnyOrigin()
-            .AllowAnyHeader()
-            .AllowAnyMethod();
+            builder.WithOrigins("http://localhost:3000", "http://localhost:5173") // Ajusta al puerto de tu React
+                  .AllowAnyHeader()
+                  .AllowAnyMethod()
+                  .AllowCredentials();
         });
-
 });
 
 #endregion
@@ -95,7 +95,11 @@ builder.Services.AddSwaggerGen(c =>
 
 
 // Add services to the container.
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+    });
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -112,12 +116,21 @@ app.UseSwaggerUI(c =>
 {
     c.SwaggerEndpoint("/swagger/v1/swagger.json", "Service Manager API V1");
 });
+
 //Lo saque porque sino se hacia imposible en Linux
 //app.UseHttpsRedirection();
 
 //Esto es para utilizar los CorsRules Configuradas
 app.UseCors(CorsRules);
-
+app.Use(async (context, next) =>
+{
+    if (context.Request.Method == "OPTIONS" &&
+    context.Request.Headers.ContainsKey("Access-Control-Request-Private-Network"))
+    {
+        context.Response.Headers.Add("Access-Control-Allow-Private-Network", "true");
+    }
+    await next();
+});
 //Se debe agregar despues de la configuracion para que utilice JWT
 app.UseAuthentication();
 
