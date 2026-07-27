@@ -192,17 +192,6 @@ namespace API_WEB_SAE_6.Controllers
                 return BadRequest();
             }
         }
-        /// <summary>
-        /// Permite validar si el perfil tiene permiso en la BD para ejecutar este endpoint
-        /// </summary>
-        /// <param name="id_funcion">Es la funcion que queremos validar </param>
-        /// <returns> True = Tiene permisos || False = No tiene permisos </returns>
-        private bool TienePermiso(int id_funcion)
-        {
-            string userData = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "NO DATA";
-            if (userData == null || userData == "NO DATA") return false;
-            if (int.TryParse(userData.Split(',')[1], out int id_perfil)) return UserAdapter.TienePermiso(id_funcion, id_perfil);
-            else return false;
-        }
+
     }
 }
