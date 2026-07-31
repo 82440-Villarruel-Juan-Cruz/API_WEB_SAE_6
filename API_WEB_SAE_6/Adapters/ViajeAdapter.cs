@@ -117,6 +117,40 @@ namespace API_WEB_SAE_6.Adapters
         /// 
         /// </summary>
         /// <returns></returns>
+        public List<Viajes>? ObtenerViajesXFecha(DateTime desde,DateTime hasta)
+        {
+            try
+            {
+                //Por si algun momento les pinta cambiar de motor nuevamente
+                if (MotorDB == "MySQL")
+                {
+                    List<MySqlParameter> parameters = [
+                        new("i_fecha_desde", MySqlDbType.Date) { Value = desde },
+                        new("i_fecha_hasta", MySqlDbType.Date) { Value = hasta }];
+                    GeneralAdapterMySQL consultor = new();
+                    DataTable respuesta = consultor.ExecuteStoredProcedure("MODULO_VIAJES_Buscar_Viajes_Fechas", parameters);
+
+                    List<Viajes> listadoEventosCompleto = [];
+                    foreach (DataRow row in respuesta.Rows)
+                    {
+                        Viajes eventos = new(row);
+                        listadoEventosCompleto.Add(eventos);
+                    }
+                    return listadoEventosCompleto;
+
+                }
+                else return null;
+            }
+            catch (Exception ex)
+            {
+                Logger.RegistrarDatos(Logger.LogOptions.Error, "ObtenerViajesXLegajo", ex.Message, "ViajeAdapter");
+                return null;
+            }
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Viajes? ObtenerViajesXId(int idViaje)
         {
             try

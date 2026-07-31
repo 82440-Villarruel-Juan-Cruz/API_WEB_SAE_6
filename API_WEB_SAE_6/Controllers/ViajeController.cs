@@ -227,6 +227,70 @@ namespace API_WEB_SAE_6.Controllers
             }
         }
         /// <summary>
+        /// Buscar viajes por rango de fechas
+        /// </summary>
+        /// <returns>Un listado de viajes en esa fecha</returns>
+        /// <remarks>
+        /// NOTA: Es necesario usar el JWT en el encabezado de Authorization
+        ///  
+        /// Ejemplo de uso:
+        /// 
+        ///     GET /api/Viaje/ObtenerViajesXFecha/{fecha_desde}/{fecha_hasta}
+        ///     
+        ///     RESPONSE:
+        ///     [
+        ///         {
+        ///           "id": 0,
+        ///           "nombre": "string",
+        ///           "fecha_inicio": "2026-06-16",
+        ///           "fecha_fin": "2026-06-16",
+        ///           "seguro_confirmado": true,
+        ///           "origen": "string",
+        ///           "destino": "string",
+        ///           "motivo": "string",
+        ///           "cantidad_personas": 0,
+        ///           "id_empresa_viaje": 0,
+        ///           "nombre_empresa": "string",
+        ///           "documentacion_presentada": true,
+        ///           "costo_aproximado": 0
+        ///         },
+        ///     ]
+        /// </remarks>
+        /// <response code="200" >Devuelve un listado de viajes activos </response>
+        /// <response code="204" >No se encontro ningun viaje en ese periodo </response>
+        /// <response code="400" >Ocurre un error en la consulta </response>    
+        /// <response code="409" >Ocurre un error en el procedimiento/vista de la base de datos </response>
+        /// <response code="500" >Ocurre un error en la API o en el Servidor no documentada </response>
+        [HttpGet("{fecha_desde}/{fecha_hasta}")]
+        [Authorize]
+        [ActionName("ObtenerViajesXFecha")]
+        [ProducesResponseType(typeof(IEnumerable<Viajes>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<IEnumerable<Viajes>> ObtenerViajesXFecha([FromRoute]DateTime fecha_desde, [FromRoute] DateTime fecha_hasta)
+        {
+            try
+            {
+                if (TienePermiso(66))
+                {
+                    List<Viajes>? listadoEventosCompleto = TravelAdapter.ObtenerViajesXFecha(fecha_desde,fecha_hasta);
+
+                    if (listadoEventosCompleto == null) return Conflict();
+                    if (listadoEventosCompleto.Count == 0) return NoContent();
+
+                    return Ok(listadoEventosCompleto);
+                }
+                else return Forbid();
+            }
+            catch (Exception ex)
+            {
+                Logger.RegistrarDatos(Logger.LogOptions.Error, this.Request.Path, ex.Message, ControllerName);
+                return BadRequest();
+            }
+        }
+        /// <summary>
         /// Buscar viajes por legajo
         /// </summary>
         /// <returns>Un listado de viajes que el estudiante haga</returns>
