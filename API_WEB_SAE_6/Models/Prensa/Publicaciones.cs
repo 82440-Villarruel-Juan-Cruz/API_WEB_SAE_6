@@ -61,7 +61,7 @@ namespace API_WEB_SAE_6.Models.Prensa
             prioridad = int.Parse(data["prioridad"].ToString() ?? "0");
             no_dar_baja = data["no_dar_baja"].ToString() == "1";
             visualizaciones = int.Parse(data["visualizaciones"].ToString() ?? "0");
-            documentos_asociados = data["documentos_asociados"].ToString();
+            //documentos_asociados = data["documentos_asociados"].ToString();
         }
     }
 }

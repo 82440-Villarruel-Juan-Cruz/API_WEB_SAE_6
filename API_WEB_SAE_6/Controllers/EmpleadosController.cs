@@ -963,7 +963,7 @@ namespace API_WEB_SAE_6.Controllers
                 //El numero de funcion es: 140
                 if ( TienePermiso(140))
                 {
-                    if (EmployAdapter.ContarVisualizaconLink(id)) return Conflict();
+                    if (!EmployAdapter.ContarVisualizaconLink(id)) return Conflict();
                     else return Ok("Visualizado");
                 }
                 else return Forbid();
