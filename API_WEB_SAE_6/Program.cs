@@ -1,4 +1,5 @@
 using API_WEB_SAE_6.Logs;
+using API_WEB_SAE_6.Tools;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -17,6 +18,7 @@ builder.Services.AddCors(options =>
             policy.WithOrigins("http://localhost:1986",
                 "http://localhost:5173",
                 "http://localhost:7221",
+                 "https://sae-gestion-two.vercel.app",
                 "http://tidsrv1.tid.frc.utn.edu.ar",
                 "https://tidsrv1.tid.frc.utn.edu.ar") // Tus puertos de React
                   .AllowAnyHeader()
@@ -35,7 +37,7 @@ builder.Configuration.AddJsonFile("appsettings.json");
 //{
 //    serverOptions.ListenAnyIP(5000); // Puedes cambiar el puerto aquí si lo necesitas
 //});
-var secretKey = builder.Configuration.GetSection("Settings").GetSection("secretkey").ToString();
+var secretKey = SettingsReader.GetAppSettings().SecretKey; 
 var keyBytes = Encoding.UTF8.GetBytes(secretKey ?? "ERROR");
 
 builder.Services.AddAuthentication(config =>
