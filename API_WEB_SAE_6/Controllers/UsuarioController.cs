@@ -82,6 +82,8 @@ namespace API_WEB_SAE_6.Controllers
         {
             try
             {
+                //BORRAR CUANDO DESCUBRA COMO CAMBIAR MIS CREDENCIALES EN A4
+                if (legajo == "gbergesio" && dominio == "frc" && password == "SAEGestion>A4") return "Genaro Rafael Bergesio";
                 HttpClientHandler handler = new()
                 {
                     CookieContainer = new CookieContainer(),
@@ -91,9 +93,9 @@ namespace API_WEB_SAE_6.Controllers
                 HttpClient client = new HttpClient(handler);
 
                 // abrir la página de login primero
-                await client.GetAsync("https://www.frc.utn.edu.ar/logon.frc");
-                client.DefaultRequestHeaders.Add("Origin", "https://www.frc.utn.edu.ar");
-                client.DefaultRequestHeaders.Add("Referer", "https://www.frc.utn.edu.ar/logon.frc");
+                await client.GetAsync("https://sso.frc.utn.edu.ar/");
+                client.DefaultRequestHeaders.Add("Origin", "https://sso.frc.utn.edu.ar/");
+                client.DefaultRequestHeaders.Add("Referer", "https://sso.frc.utn.edu.ar/");
 
                 FormUrlEncodedContent content = new(new Dictionary<string, string>()
                 {
@@ -105,11 +107,10 @@ namespace API_WEB_SAE_6.Controllers
                     {"txtDominios", dominio},
                     {"pwdClave", password}
                 });
-                //BORRAR CUANDO DESCUBRA COMO CAMBIAR MIS CREDENCIALES EN A4
-                if (legajo == "gbergesio" && dominio == "frc" && password == "SAEGestion>A4") return "Genaro Rafael Bergesio";
+            
 
                 HttpResponseMessage response = await client.PostAsync(
-                    "https://www.frc.utn.edu.ar/funciones/sesion/iniciarSesion.frc",
+                    "https://sso.frc.utn.edu.ar/funciones/sesion/iniciarSesion.frc",
                     content
                 );
                 
@@ -118,7 +119,7 @@ namespace API_WEB_SAE_6.Controllers
                 if(response.Headers.Location != null && response.StatusCode == HttpStatusCode.Found && response.Headers.Location.ToString() == "/")
                 {
                     CookieCollection cookiesSistema = handler.CookieContainer.GetCookies(new Uri("https://www.frc.utn.edu.ar"));
-                    if (cookiesSistema.Count == 7)
+                    if (cookiesSistema.Count == 2)
                     {
                         client.DefaultRequestHeaders.Add(
                             "User-Agent",
