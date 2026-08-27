@@ -228,7 +228,7 @@ namespace API_WEB_SAE_6.Adapters
                         new("i_id_especialidad", MySqlDbType.VarChar) { Value = id_especialidad},
                         new("i_nombre_usuario", MySqlDbType.VarChar) { Value = user.nombre_usuario },
                         new("i_id_perfil", MySqlDbType.Int32) { Value = user.id_perfil },
-                        new("i_id_usuario_alta", MySqlDbType.Bit) { Value = user.activo }
+                        new("i_id_usuario_alta", MySqlDbType.Int32) { Value = idUserCreacion }
                         ];
 
                     GeneralAdapterMySQL consult = new();
