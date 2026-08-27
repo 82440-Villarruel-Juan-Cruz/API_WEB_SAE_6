@@ -141,7 +141,7 @@ namespace API_WEB_SAE_6.Controllers
                         else
                         {
                             //A los docentes los redirige aca 
-                            bodyHtml = await (await client.GetAsync("https://www.frc.utn.edu.ar/academico3/")).Content.ReadAsStringAsync(); ;
+                            bodyHtml = await (await client.GetAsync("https://sso.frc.utn.edu.ar/")).Content.ReadAsStringAsync(); 
 
                             // 1. Extraer el form específico
                             var match = Regex.Match(bodyHtml,
