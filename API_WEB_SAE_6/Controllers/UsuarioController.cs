@@ -131,11 +131,19 @@ namespace API_WEB_SAE_6.Controllers
                         //Legajos numericos son de estudiantes buscamos su nombre completo
                         if (int.TryParse(legajo, out int _))
                         {
-                            bodyHtml = await (await client.GetAsync("https://a4.frc.utn.edu.ar/4/")).Content.ReadAsStringAsync();
-                            Match match = Regex.Match(bodyHtml, @"var\s+nombreCompleto\s*=\s*'([^']*)'");
+                            //bodyHtml = await (await client.GetAsync("https://a4.frc.utn.edu.ar/4/")).Content.ReadAsStringAsync();
+                            //Match match = Regex.Match(bodyHtml, @"var\s+nombreCompleto\s*=\s*'([^']*)'");
+
+                            //A los docentes los redirige aca 
+                            bodyHtml = await (await client.GetAsync("https://sso.frc.utn.edu.ar/")).Content.ReadAsStringAsync();
+
+                            // 1. Extraer el form específico
+                            var match = Regex.Match(bodyHtml,
+                                @"<form[^>]*id\s*=\s*[""']frmLogOut[""'][^>]*>.*?<strong>(.*?)</strong>.*?</form>",
+                                RegexOptions.Singleline | RegexOptions.IgnoreCase);
 
                             if (match.Success)
-                                return match.Groups[1].Value;
+                                return match.Groups[1].Value.Replace("Bienvenido,", "", StringComparison.OrdinalIgnoreCase).Trim();
                             else return "ERROR";
                         }
                         else
