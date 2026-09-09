@@ -240,8 +240,16 @@ namespace API_WEB_SAE_6.Controllers
                             if (uploadsPath != "ERROR")
                             {
                                 string filePath = Path.Combine(uploadsPath, doc.ruta);
-                                //Verifica si existe el archivo
+
+                                Console.WriteLine($"uploadsPath: {uploadsPath}");
+                                Console.WriteLine($"doc.ruta: {doc.ruta}");
+                                Console.WriteLine($"filePath: {filePath}");
+                                Console.WriteLine($"Existe: {System.IO.File.Exists(filePath)}");
+
                                 FileInfo fileInfo = new(filePath);
+
+                                Console.WriteLine($"FileInfo.Exists: {fileInfo.Exists}");
+                                Console.WriteLine($"Length: {(fileInfo.Exists ? fileInfo.Length : 0)}");
 
                                 if (fileInfo.Exists)
                                 {
