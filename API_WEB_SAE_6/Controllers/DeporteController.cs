@@ -1891,7 +1891,6 @@ namespace API_WEB_SAE_6.Controllers
         ///     {
         ///       "id": 0,
         ///       "legajo": "string",
-        ///       "habilitado_deportado": true,
         ///       "vencimiento_ficha": "2024-07-25T22:29:35.186Z",
         ///       "habilitado_deporte": true
         ///     }
@@ -1901,7 +1900,6 @@ namespace API_WEB_SAE_6.Controllers
         ///       "id": 0,
         ///       "legajo": "string",
         ///       "nombre_deportista": "string",
-        ///       "habilitado_deportado": true,
         ///       "vencimiento_ficha": "2024-07-25T22:29:35.186Z",
         ///       "habilitado_deporte": true
         ///     }
@@ -2183,7 +2181,7 @@ namespace API_WEB_SAE_6.Controllers
             }
         }
         /// <summary>
-        /// Permite crear deportistas
+        /// Permite crear deportistas despues hay que modificarlo
         /// </summary>
         /// <param name="deportista">El deportista que deseamos crear, se envia en el Body</param>
         /// <returns>Un deportista creado en la base de datos o error</returns>
@@ -2196,18 +2194,13 @@ namespace API_WEB_SAE_6.Controllers
         ///     BODY:
         ///     {
         ///       "id": 0,
-        ///       "legajo": "string",
-        ///       "habilitado_deportado": true,
-        ///       "vencimiento_ficha": "2024-07-25T22:29:35.186Z",
-        ///       "habilitado_deporte": true
+        ///       "legajo": "string"
         ///     }
         ///     
         ///     RESPONSE:
         ///     {
         ///       "id": 0,
         ///       "legajo": "string",
-        ///       "nombre_deportista": "string",
-        ///       "habilitado_deportado": true,
         ///       "vencimiento_ficha": "2024-07-25T22:29:35.186Z",
         ///       "habilitado_deporte": true
         ///     }
