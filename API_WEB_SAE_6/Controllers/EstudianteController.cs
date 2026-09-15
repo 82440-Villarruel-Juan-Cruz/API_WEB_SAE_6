@@ -240,8 +240,16 @@ namespace API_WEB_SAE_6.Controllers
                             if (uploadsPath != "ERROR")
                             {
                                 string filePath = Path.Combine(uploadsPath, doc.ruta);
-                                //Verifica si existe el archivo
+
+                                Logger.RegistrarDatos(Logger.LogOptions.Alerta,this.Request.Path,$"uploadsPath: {uploadsPath}", ControllerName);
+                                Logger.RegistrarDatos(Logger.LogOptions.Alerta,this.Request.Path,$"doc.ruta: {doc.ruta}", ControllerName);
+                                Logger.RegistrarDatos(Logger.LogOptions.Alerta,this.Request.Path,$"filePath: {filePath}", ControllerName);
+                                Logger.RegistrarDatos(Logger.LogOptions.Alerta, this.Request.Path,$"Existe: {System.IO.File.Exists(filePath)}", ControllerName);
+
                                 FileInfo fileInfo = new(filePath);
+
+                                Logger.RegistrarDatos(Logger.LogOptions.Alerta, this.Request.Path, $"FileInfo.Exists: {fileInfo.Exists}", ControllerName);
+                                Logger.RegistrarDatos(Logger.LogOptions.Alerta, this.Request.Path, $"Length: {(fileInfo.Exists ? fileInfo.Length : 0)}", ControllerName);
 
                                 if (fileInfo.Exists)
                                 {
