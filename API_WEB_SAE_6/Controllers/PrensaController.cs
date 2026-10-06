@@ -1027,6 +1027,47 @@ namespace API_WEB_SAE_6.Controllers
             }
         }
         /// <summary>
+        /// Actualiza el contador de visualizaciones de una publicacion
+        /// </summary>
+        /// <param name="id">Es el id de la publicacion</param>
+        /// <returns>Un mensaje de OK cuando se suma la publicacion</returns>
+        /// <remarks>
+        /// NOTA: Endpoint Libre para que cualquier usuario pueda sumar una visualizacion a la publicacion
+        ///  
+        /// Ejemplo de uso:
+        /// 
+        ///     POST /api/Prensa/ContarVisualizacion/{id}
+        ///     
+        ///     RESPONSE:
+        ///     {
+        ///         "Visualizado"
+        ///     }
+        ///     
+        /// </remarks>
+        /// <response code="200" >Devuelve OK y un mensaje </response>
+        /// <response code="400" >Ocurre un error en la consulta </response>
+        /// <response code="409" >Ocurre un error en el procedimiento/vista de la base de datos </response>
+        /// <response code="500" >Ocurre un error en la API o en el Servidor no documentada </response>        
+        [HttpPost("{id}")]
+        [ActionName("ContarPublicacion")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<string> ContarPublicacion(int id)
+        {
+            try
+            {
+                if (PressAdapter.ContarVisualizaciones(id)) return Ok("Visualizado");
+                else return Conflict();
+            }
+            catch (Exception ex)
+            {
+                Logger.RegistrarDatos(Logger.LogOptions.Error, this.Request.Path, ex.Message, ControllerName);
+                return BadRequest();
+            }
+        }
+        /// <summary>
         /// Permite eliminar publicacion
         /// </summary>
         /// <param name="id">Es el id de la publicacion</param>
@@ -1050,6 +1091,7 @@ namespace API_WEB_SAE_6.Controllers
         /// <response code="403" >Su perfil no cuenta con este permiso</response>
         /// <response code="409" >Ocurre un error en el procedimiento/vista de la base de datos y devuelve el horario </response>
         /// <response code="500" >Ocurre un error en la API o en el Servidor no documentada </response>        
+        [Authorize]
         [HttpDelete("{id}")]
         [ActionName("EliminarPublicacion")]
         [ProducesResponseType(StatusCodes.Status200OK)]

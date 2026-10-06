@@ -379,6 +379,19 @@ namespace API_WEB_SAE_6.Adapters
             else return new();
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="idPublicacion"></param>
+        /// <returns></returns>
+        public bool ContarVisualizaciones(int idPublicacion)
+        {
+            List<MySqlParameter> parameters = [new("i_id_publicacion", MySqlDbType.Int32) { Value = idPublicacion }];
+            GeneralAdapterMySQL consult = new();
+            DataTable respuesta = consult.ExecuteStoredProcedure("MODULO_PRENSA_Sumar_Visualizacion", parameters);
+            if (respuesta.Rows.Count > 0 && respuesta.Rows[0][0].ToString() == "ERROR") return false;
+            else return true;
+        }
+        /// <summary>
         /// Elimina una publicación de la base de datos, devuelve true si la eliminación fue exitosa, devuelve false si ocurre un error al ejecutar el procedimiento almacenado o si el procedimiento almacenado devuelve un resultado indicando que no se pudo eliminar la publicación
         /// </summary>
         /// <param name="idPublicacion"></param>
