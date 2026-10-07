@@ -194,7 +194,7 @@ namespace API_WEB_SAE_6.Adapters
                     List<MySqlParameter> parameters = [
                         new("i_legajo", MySqlDbType.VarChar) { Value = becario.legajo },
                         new("i_alquila", MySqlDbType.Bit) { Value = becario.alquila },
-                        new("i_fecha_solicitud", MySqlDbType.Date) { Value = becario.fecha_solicitud },
+                        new("i_fecha_solicitud", MySqlDbType.Date) { Value = becario.fecha_solicitud.Date },
                         new("i_anio_beca", MySqlDbType.Int32) { Value = becario.anio_beca },
                         new("i_id_becario_previo", MySqlDbType.Int32) { Value = becario.id_becario_previo },
                         new("i_id_usuario_alta", MySqlDbType.Int32) { Value = idUserCreacion }
