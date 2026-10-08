@@ -1,12 +1,35 @@
 using API_WEB_SAE_6.Logs;
 using API_WEB_SAE_6.Tools;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Localization;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using System.Globalization;
 using System.Reflection;
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
+
+#region Cultura
+// Cultura predeterminada para la aplicación.
+var cultura = new CultureInfo("es-AR");
+
+CultureInfo.DefaultThreadCurrentCulture = cultura;
+CultureInfo.DefaultThreadCurrentUICulture = cultura;
+
+// Cultura para las solicitudes HTTP.
+builder.Services.Configure<RequestLocalizationOptions>(options =>
+{
+    options.DefaultRequestCulture = new RequestCulture(cultura);
+    options.SupportedCultures = new[] { cultura };
+    options.SupportedUICultures = new[] { cultura };
+
+    // Mantener es-AR aunque el cliente envíe otra cultura.
+    options.RequestCultureProviders.Clear();
+});
+
+#endregion
+
 #region CorsRules
 
 var CorsRules = "CorsRules";
@@ -112,6 +135,9 @@ builder.Services.AddSwaggerGen();
 //Apenas inicia el programa el logger verifica donde guardar los datos
 Logger.DefinirDirectorios();
 var app = builder.Build();
+
+app.UseRequestLocalization();
+
 // Configure the HTTP request pipeline.
 //if (app.Environment.IsDevelopment())
 //{
