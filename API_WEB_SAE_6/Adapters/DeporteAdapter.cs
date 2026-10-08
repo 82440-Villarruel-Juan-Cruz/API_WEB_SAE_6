@@ -1004,7 +1004,7 @@ namespace API_WEB_SAE_6.Adapters
                     //Inicializa un valor y le asigna el tipo
                     List<MySqlParameter> parameters =
                         [new("i_id_torneo", MySqlDbType.Int32) { Value = torneo.id},
-                        new("i_nombre_torneo", MySqlDbType.VarChar) { Value = torneo.nombre_deporte},
+                        new("i_nombre_torneo", MySqlDbType.VarChar) { Value = torneo.nombre_torneo},
                         new("i_fecha_ini", MySqlDbType.VarChar) { Value = torneo.fecha_inicio},
                         new("i_fecha_fin", MySqlDbType.VarChar) { Value = torneo.fecha_fin},
                         new("i_fecha_limite", MySqlDbType.VarChar) { Value = torneo.fecha_limite_inscripcion},
