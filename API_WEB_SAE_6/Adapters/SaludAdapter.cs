@@ -956,5 +956,43 @@ namespace API_WEB_SAE_6.Adapters
             }
             else return new();
         }
+
+        /// <summary>
+        /// Crea un nuevo turno medico, devuelve el turno medico creado con su informacion completa, devuelve un objeto vacio si el resultado es correcto pero no hay datos, devuelve null si ocurre un error
+        /// </summary>
+        /// <param name="turnoMedico"></param>
+        /// <param name="idUserCrea"></param>
+        /// <returns></returns>
+        public TurnosMedicos CrearTurnosMedicosEmpleado(TurnosMedicos turnoMedico, int idUserCrea)
+        {
+            if (MotorDB == "MySQL")
+            {
+                try
+                {
+                    //Inicializa un valor y le asigna el tipo
+                    List<MySqlParameter> parameters = [
+                        new("i_cuil_medico", MySqlDbType.VarChar) { Value = turnoMedico.cuil_medico},
+                        new("i_legajo", MySqlDbType.VarChar) { Value = turnoMedico.legajo},
+                        new("i_fecha_solicitud", MySqlDbType.Date) { Value = turnoMedico.fecha_solicitud},
+                        new("i_fecha_atencion", MySqlDbType.Date) { Value = turnoMedico.fecha_atencion},
+                        new("i_hora_atencion", MySqlDbType.VarChar) { Value = turnoMedico.hora_atencion},
+                        new("i_asunto", MySqlDbType.VarChar) { Value = turnoMedico.asunto },
+                        new("i_id_usuario_alta", MySqlDbType.Int32) { Value = idUserCrea }
+                        ];
+
+                    GeneralAdapterMySQL consult = new();
+                    DataTable respuesta = consult.ExecuteStoredProcedure("MODULO_SALUD_Crear_Turno_Medico_Empleado", parameters);
+
+                    if (respuesta.Rows.Count == 0 || respuesta.Rows[0][0].ToString() == "ERROR") return new();
+                    else return new(respuesta.Rows[0]);
+                }
+                catch (Exception ex)
+                {
+                    Logger.RegistrarDatos(Logger.LogOptions.Error, "CrearTurnosMedicos", ex.Message, "SaludAdapter");
+                    return new();
+                }
+            }
+            else return new();
+        }
     }
 }

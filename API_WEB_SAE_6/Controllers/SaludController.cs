@@ -2020,7 +2020,7 @@ namespace API_WEB_SAE_6.Controllers
         {
             try
             {
-                if (TienePermiso(80))
+                if (TienePermiso(81))
                 {
                     string userData = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "NO DATA";
                     if (userData != null &&
@@ -2029,6 +2029,91 @@ namespace API_WEB_SAE_6.Controllers
                        int.TryParse(userData.Split(',')[2], out int idUserCrea))
                     {
                         turno = HealthAdapter.CrearTurnosMedicos(turno, idUserCrea);
+                        if (turno.id != -1) return Created("Turno Medico Creado", turno);
+                        else return Conflict();
+                    }
+                    else return Unauthorized();
+
+                }
+                else return Forbid();
+            }
+            catch (Exception ex)
+            {
+                Logger.RegistrarDatos(Logger.LogOptions.Error, this.Request.Path, ex.Message, ControllerName);
+                return BadRequest();
+            }
+        }
+
+        /// <summary>
+        /// Permite crear turnos medicos
+        /// </summary>
+        /// <param name="turno">El turno que deseamos crear, se envia en el Body</param>
+        /// <returns>Un turno creado en la base de datos o error</returns>
+        /// <remarks>
+        /// NOTA: Es necesario usar el JWT en el encabezado de Authorization
+        ///  
+        /// Ejemplo de uso:
+        /// 
+        ///     POST /api/Salud/CrearTurnoMedico/
+        ///     BODY:
+        ///     {
+        ///       "id": 0,
+        ///       "cuil_medico": "string",
+        ///       "especialista": "string",
+        ///       "legajo": "string",
+        ///       "paciente": "string",
+        ///       "fecha_solicitud": "2024-07-08T20:31:46.626Z",
+        ///       "fecha_atencion": "2024-07-08T20:31:46.626Z",
+        ///       "hora_atencion": "string",
+        ///       "asunto": "string",
+        ///       "id_estado_turno": 0,
+        ///       "estado": "string"
+        ///     }
+        ///     
+        ///     RESPONSE:
+        ///     {
+        ///       "id": 0,
+        ///       "cuil_medico": "string",
+        ///       "especialista": "string",
+        ///       "legajo": "string",
+        ///       "paciente": "string",
+        ///       "fecha_solicitud": "2024-07-08T20:31:46.626Z",
+        ///       "fecha_atencion": "2024-07-08T20:31:46.626Z",
+        ///       "hora_atencion": "string",
+        ///       "asunto": "string",
+        ///       "id_estado_turno": 0,
+        ///       "estado": "string"
+        ///     }
+        ///     
+        /// </remarks>
+        /// <response code="201" >Devuelve el turno creado en la BD </response>
+        /// <response code="400" >Ocurre un error en la consulta </response>
+        /// <response code="401" >El empleado no genero su JWT o su perfil no cuenta con este permiso </response>
+        /// <response code="403" >Su perfil no cuenta con este permiso</response>
+        /// <response code="409" >Ocurre un error en el procedimiento/vista de la base de datos </response>
+        /// <response code="500" >Ocurre un error en la API o en el Servidor no documentada </response>
+        [HttpPost]
+        [ActionName("CrearTurnoMedicoEmpleado")]
+        [Authorize]
+        [ProducesResponseType(typeof(TurnosMedicos), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
+        [ProducesResponseType(StatusCodes.Status409Conflict)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        public ActionResult<TurnosMedicos> CrearTurnoMedicoEmpleado([FromBody] TurnosMedicos turno)
+        {
+            try
+            {
+                if (TienePermiso(80))
+                {
+                    string userData = User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? "NO DATA";
+                    if (userData != null &&
+                       userData.Length > 0 &&
+                       userData != "NO DATA" &&
+                       int.TryParse(userData.Split(',')[2], out int idUserCrea))
+                    {
+                        turno = HealthAdapter.CrearTurnosMedicosEmpleado(turno, idUserCrea);
                         if (turno.id != -1) return Created("Turno Medico Creado", turno);
                         else return Conflict();
                     }
