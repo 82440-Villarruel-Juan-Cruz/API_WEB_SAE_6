@@ -72,6 +72,79 @@ namespace API_WEB_SAE_6.Controllers
             return Ok("Hello World! V3");
         }
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="legajo"></param>
+        /// <param name="password"></param>
+        /// <param name="dominio"></param>
+        /// <returns></returns>
+        private async Task<ActionResult<string>> TestSessionA4(string legajo, string password, string dominio)
+        {
+            var cookies = new CookieContainer();
+            using var handler = new HttpClientHandler
+            {
+                AllowAutoRedirect = false,
+                UseCookies = true,
+                CookieContainer = cookies,
+                AutomaticDecompression =
+                    DecompressionMethods.GZip |
+                    DecompressionMethods.Deflate |
+                    DecompressionMethods.Brotli
+            };
+
+            using var client = new HttpClient(handler);
+
+            var loginUrl = "https://sso.frc.utn.edu.ar/?e=004&App=WEB";
+
+            using var initialResponse = await client.GetAsync(loginUrl);
+
+            Console.WriteLine($"GET inicial: {(int)initialResponse.StatusCode}");
+            Console.WriteLine($"URL final: {initialResponse.RequestMessage?.RequestUri}");
+
+            var postUrl =
+                "https://sso.frc.utn.edu.ar/funciones/sesion/iniciarSesion.frc";
+
+            using var content = new FormUrlEncodedContent(
+                new Dictionary<string, string>
+                {
+                    ["userid"] = "userid",
+                    ["t"] = "79845687",
+                    ["page"] = "login",
+                    ["redir"] = "",
+                    ["loginCsrf"] = "loginCsrfExtraidoDelFormulario",
+                    ["txtUsuario"] = legajo,
+                    ["txtDominios"] = dominio,
+                    ["pwdClave"] = password
+                });
+
+            using var response = await client.PostAsync(postUrl, content);
+
+            Console.WriteLine($"POST: {(int)response.StatusCode}");
+            Console.WriteLine($"Location: {response.Headers.Location}");
+            Console.WriteLine($"URL solicitada: {response.RequestMessage?.RequestUri}");
+
+            Console.WriteLine("\nCabeceras de respuesta:");
+            foreach (var header in response.Headers)
+            {
+                Console.WriteLine($"{header.Key}: {string.Join(", ", header.Value)}");
+            }
+
+            Console.WriteLine("\nCookies del dominio:");
+            foreach (Cookie cookie in cookies.GetCookies(
+                new Uri("https://sso.frc.utn.edu.ar/")))
+            {
+                // No imprimir valores de cookies de sesión.
+                Console.WriteLine($"{cookie.Name}: presente");
+            }
+
+            var body = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine($"\nTamaño del cuerpo: {body.Length} caracteres");
+            Console.WriteLine(body[..Math.Min(body.Length, 1000)]);
+
+            return "";
+        }
+        /// <summary>
         /// Es el metodo para realizar consultas a la web de frc.utn.edu.ar para validar las credenciales de los estudiantes.
         /// </summary>
         /// <param name="legajo">Un valor provisto por el centro de computos unico e irrepetible</param>
@@ -82,6 +155,7 @@ namespace API_WEB_SAE_6.Controllers
         {
             try
             {
+                //await TestSessionA4(legajo, password, dominio);
                 //BORRAR CUANDO DESCUBRA COMO CAMBIAR MIS CREDENCIALES EN A4
                 if (legajo == "gbergesio" && dominio == "frc" && password == "SAEGestion>A4") return "Genaro Rafael Bergesio";
                 HttpClientHandler handler = new()
@@ -90,12 +164,12 @@ namespace API_WEB_SAE_6.Controllers
                     AllowAutoRedirect = false
                 };
 
-                HttpClient client = new HttpClient(handler);
+                HttpClient client = new(handler);
 
                 // abrir la página de login primero
-                await client.GetAsync("https://sso.frc.utn.edu.ar/");
-                client.DefaultRequestHeaders.Add("Origin", "https://sso.frc.utn.edu.ar/");
-                client.DefaultRequestHeaders.Add("Referer", "https://sso.frc.utn.edu.ar/");
+                await client.GetAsync("https://ww1.frc.utn.edu.ar/logon.frc");
+                client.DefaultRequestHeaders.Add("Origin", "https://ww1.frc.utn.edu.ar/logon.frc");
+                client.DefaultRequestHeaders.Add("Referer", "https://ww1.frc.utn.edu.ar/logon.frc");
 
                 FormUrlEncodedContent content = new(new Dictionary<string, string>()
                 {
@@ -110,7 +184,7 @@ namespace API_WEB_SAE_6.Controllers
             
 
                 HttpResponseMessage response = await client.PostAsync(
-                    "https://sso.frc.utn.edu.ar/funciones/sesion/iniciarSesion.frc",
+                    "https://ww1.frc.utn.edu.ar/funciones/sesion/iniciarSesion.frc",
                     content
                 );
                 
