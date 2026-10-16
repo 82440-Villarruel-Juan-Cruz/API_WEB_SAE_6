@@ -575,7 +575,7 @@ namespace API_WEB_SAE_6.Adapters
                     //Inicializa un valor y le asigna el tipo
                     List<MySqlParameter> parameters = [
                         new("i_id_becario", MySqlDbType.Int32) { Value = idBecario},
-                        new("i_id_proyecto", MySqlDbType.Int32) { Value = idProyectoInvestigacion},
+                        new("i_id_proyecto_investigacion", MySqlDbType.Int32) { Value = idProyectoInvestigacion},
                         new("i_id_usuario_alta", MySqlDbType.Int32) { Value = idUserCreacion }
                         ];
 
