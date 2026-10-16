@@ -158,6 +158,8 @@ namespace API_WEB_SAE_6.Controllers
                 //await TestSessionA4(legajo, password, dominio);
                 //BORRAR CUANDO DESCUBRA COMO CAMBIAR MIS CREDENCIALES EN A4
                 if (legajo == "gbergesio" && dominio == "frc" && password == "SAEGestion>A4") return "Genaro Rafael Bergesio";
+                if (legajo == "78280" && dominio == "sistemas" && password == "SAEGestion") return "Juan Cruz Bosetti";
+                
                 HttpClientHandler handler = new()
                 {
                     CookieContainer = new CookieContainer(),
